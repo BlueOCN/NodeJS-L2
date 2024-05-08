@@ -6,3 +6,8 @@ Check node version
 ```PS
 npm install express
 ```
+
+Start a new project
+```PS
+express red-bicicletas --view=pug
+```
