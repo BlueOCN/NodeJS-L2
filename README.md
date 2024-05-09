@@ -21,7 +21,17 @@ Install dependencies
 npm install
 ```
 
+Install nodemon
+```PS
+npm install nodemon --save-dev
+```
+
 Run the app
 ```PS
 npm start
+```
+
+Run the app with nodemon
+```PS
+npm run devstart
 ```
