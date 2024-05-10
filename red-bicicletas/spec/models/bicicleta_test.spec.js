@@ -55,3 +55,31 @@ describe('Bicicleta.removeById', () => {
 
     });
 });
+
+describe('Bicicleta.updateById', () => {
+    it('debe modificar la bici con id 1', () => {
+        // Lista vacia
+        expect(Bicicleta.allBicis.length).toBe(0);
+
+        // Añadir elemento 1 y 2
+        var a = new Bicicleta(1, 'rojo', 'urbana', [19.432608, -99.133209]);
+        var b = new Bicicleta(2, 'blanca', 'urbana', [19.432278, -99.133789]);
+        Bicicleta.add(a);
+        Bicicleta.add(b);
+        expect(Bicicleta.allBicis.length).toBe(2);
+
+        // Modificar elemento 1
+        var new_color = 'magenta';
+        var new_model = 'fukimo';
+        var new_location = [19.432108, -99.133809];
+        Bicicleta.updateById(a.id, new_color, new_model, new_location);
+        expect(Bicicleta.allBicis.length).toBe(2);
+
+        // Corroborar atributos del elemento 1
+        expect(a.id).toBe(1);
+        expect(a.color).toBe(new_color);
+        expect(a.modelo).toBe(new_model);
+        expect(a.ubicacion).toBe(new_location);
+        
+    });
+});
