@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 5,\r\n    \"color\": \"rojo\",\r\n    \"modelo\": \"dorado\",\r\n    \"lat\": 123,\r\n    \"lng\": 123\r\n}",
+					"raw": "{\r\n    \"id\": 5,\r\n    \"color\": \"rojo\",\r\n    \"modelo\": \"dorado\",\r\n    \"lat\": 19.431278,\r\n    \"lng\": -99.134789\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -63,7 +63,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 1,\r\n    \"color\": \"caca\",\r\n    \"modelo\": \"asteroide\",\r\n    \"lat\": 666,\r\n    \"lng\": 666\r\n}",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"color\": \"caca\",\r\n    \"modelo\": \"asteroide\",\r\n    \"lat\": 19.431278,\r\n    \"lng\": -99.135789\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
