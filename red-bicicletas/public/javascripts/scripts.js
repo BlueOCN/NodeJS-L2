@@ -3,6 +3,9 @@
 * Copyright 2013-2023 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-grayscale/blob/master/LICENSE)
 */
+
+import { map } from "./map";
+
 //
 // Scripts
 // 
@@ -52,16 +55,3 @@ window.addEventListener('DOMContentLoaded', event => {
     });
 
 });
-
-
-var map = L.map('main_map').setView([19.432608, -99.133209], 16);
-
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
-
-
-var marker = L.marker([19.432608, -99.133209]).addTo(map);
-var marker = L.marker([19.432378, -99.133089]).addTo(map);
-var marker = L.marker([19.432813, -99.133525]).addTo(map);

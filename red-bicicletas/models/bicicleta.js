@@ -31,8 +31,20 @@ Bicicleta.removeById = function (aBiciId) {
     }
 }
 
+Bicicleta.updateById = function(aBiciId, aBiciColor, aBiciModelo, aBiciUbiS) {
+    if (aBiciId < 1){
+        throw new Error(`No existen identificadores menores o iguales a cero ${aBiciId}`);
+    } else if (!Bicicleta.allBicis.find(x => x.id == aBiciId)){
+        throw new Error(`No existe una bicicleta con el id ${aBiciId}`);
+    } else{
+        Bicicleta.allBicis[aBiciId-1].color = aBiciColor;
+        Bicicleta.allBicis[aBiciId-1].modelo = aBiciModelo;
+        Bicicleta.allBicis[aBiciId-1].ubicacion = aBiciUbiS;
+    }
+}
+
 var a = new Bicicleta(1, 'rojo', 'urbana', [19.432608, -99.133209]);
-var b = new Bicicleta(2, 'blanca', 'urbana', [19.432378, -99.133089]);
+var b = new Bicicleta(2, 'blanca', 'urbana', [19.432278, -99.133789]);
 
 Bicicleta.add(a);
 Bicicleta.add(b);
