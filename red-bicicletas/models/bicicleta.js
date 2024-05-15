@@ -54,7 +54,23 @@ bicicletaSchema.statics.findByCode = function(aCode, cb){
 };
 
 bicicletaSchema.statics.removeByCode = function(aCode, cb){
-    return this.deleteOne({code: aCode}, cb);
+    this.deleteOne({code: aCode})
+        .then(function(result){
+            cb(result)
+        })
+        .catch(function(err){
+            console.log(err);
+        });
+};
+
+bicicletaSchema.statics.updateByCode = function(bici, cb) {
+    this.updateOne({code: bici.code}, {color: bici.color, modelo: bici.modelo, ubicacion: bici.ubicacion})
+        .then(function(result){
+            cb(result)
+        })
+        .catch(function(err){
+            console.log(err);
+        });
 };
 
 module.exports = mongoose.model('Bicicleta', bicicletaSchema);

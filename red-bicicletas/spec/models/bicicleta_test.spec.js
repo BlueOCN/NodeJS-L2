@@ -5,13 +5,13 @@ var Bicicleta = require('../../models/bicicleta');
 describe('Testing Bicicletas', function() {
 
     beforeAll(function(done) {
-        mongoose.connection.on('connected', console.error.bind(console, 'connected'));
+        mongoose.connection.on('connected', console.error.bind(console, ' MongoDB>> connected'));
         // mongoose.connection.on('connected', () => console.log('connected'));
-        mongoose.connection.on('open', () => console.log('open'));
-        mongoose.connection.on('disconnected', () => console.log('disconnected'));
-        mongoose.connection.on('reconnected', () => console.log('reconnected'));
-        mongoose.connection.on('disconnecting', () => console.log('disconnecting'));
-        mongoose.connection.on('close', () => console.log('close'));
+        mongoose.connection.on('open', () => console.log(' MongoDB>> open'));
+        mongoose.connection.on('disconnected', () => console.log(' MongoDB>> disconnected'));
+        mongoose.connection.on('reconnected', () => console.log(' MongoDB>> reconnected'));
+        mongoose.connection.on('disconnecting', () => console.log(' MongoDB>> disconnecting'));
+        mongoose.connection.on('close', () => console.log(' MongoDB>> close'));
 
         var mongoDB = 'mongodb://localhost:27017/testdb';
         mongoose.connect(mongoDB, { useNewUrlParser: true });
@@ -38,11 +38,11 @@ describe('Testing Bicicletas', function() {
     afterEach(function(done){
         Bicicleta.deleteMany({})
             .then(function(success){
-                console.log(success);
+                // console.log(success);
                 done();
             })
             .catch(function(err) {
-                console.log(err);
+                // console.log(err);
                 done();
             });
     });
@@ -91,6 +91,61 @@ describe('Testing Bicicletas', function() {
 
                 }); 
 
+            });
+        });
+    });
+
+    describe('Bicicleta.deleteByCode', () => {
+        it('Deletes the Bicicle with the given code', (done) => {
+            Bicicleta.allBicis(function(bicis){
+                // console.log(bicis);
+                expect(bicis.length).toBe(0);
+
+                // Create 2 bicicles
+                var bici = Bicicleta.createInstance(1,"verde", "urbana", [-99.133789, 19.432278]);
+                Bicicleta.add(bici, function(result){
+                    // console.log(result);
+                    var bici2 = new Bicicleta({code: 2, color: "rojo", modelo: "montaña", ubicacion: [-99.133589, 19.432678]});
+                    Bicicleta.add(bici2, function(result){
+                        // console.log(result);
+                        Bicicleta.removeByCode(bici2.code, function(){
+                            Bicicleta.allBicis(function(bicisd){
+                                // console.log(bicisd);
+                                expect(bicisd.length).toBe(1);
+                                expect(bicisd[0].code).toBe(bici.code);
+                                done();    
+                            });
+                            
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    describe('Bicicleta.updateByCode', () =>{
+        it('Updates a bicicle with the given code', (done) => {
+            Bicicleta.allBicis(function(bicis){
+                // console.log(bicis);
+                expect(bicis.length).toBe(0);
+                var bici = Bicicleta.createInstance(1,"verde", "urbana", [-99.133789, 19.432278]);
+                Bicicleta.add(bici, function(result){
+                    // console.log(result);
+                    var bici2 = new Bicicleta({code: 2, color: "rojo", modelo: "montaña", ubicacion: [-99.133589, 19.432678]});
+                    Bicicleta.add(bici2, function(result){
+                        // console.log(result);
+                        var newbici = Bicicleta.createInstance(1,"cafe", "circo", [-99.135789, 19.436278]);
+                        Bicicleta.updateByCode(newbici, function(result){
+                            // console.log(result);
+                            Bicicleta.allBicis(function(bicis){
+                                // console.log(bicis);
+                                expect(bicis.length).toBe(2);
+                                done();
+                            });
+                            
+                        });
+                    });
+                });
             });
         });
     });

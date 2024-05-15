@@ -73,6 +73,79 @@ describe('Bicicletas API', () => {
             });
         });
     });
+
+    describe('POST BICICLETAS /update', ()=> {
+        it('status 200', (done) => {
+            Bicicleta.allBicis(function(bicis){
+                expect(bicis.length).toBe(0);
+                var targetBici = Bicicleta.createInstance(10,"verde", "urbana", [-99.133789, 19.432278]);
+                Bicicleta.add(targetBici, function(result){
+                    // console.log(result);
+                });
+            });
+            var headers = {'content-type' : 'application/json'};
+            var bici = '{ "id": 10, "color": "caca", "modelo": "asteroide", "lat": 19.431278, "lng": -99.135789 }';
+
+            request.post({
+                headers: headers,
+                url: base_url + '/update',
+                body: bici
+            }, function(error, response, body) {
+                expect(response.statusCode).toBe(200);
+                var info = JSON.parse(body).info;
+                // console.log(body);
+                expect(info.acknowledged).toBe(true);
+                expect(info.modifiedCount).toBe(1);
+                expect(info.matchedCount).toBe(1);
+                Bicicleta.allBicis(function(bicis){
+                    // console.log(bicis);
+                    expect(bicis.length).toBe(1);
+                    expect(bicis[0].color).toBe("caca");
+                    expect(bicis[0].modelo).toBe("asteroide");
+                    expect(bicis[0].ubicacion[1]).toBe(19.431278);
+                    expect(bicis[0].ubicacion[0]).toBe(-99.135789);
+                    done();
+                });
+            });
+
+        });
+    });
+
+    describe('POST BICICLETAS /delete', () =>{
+        it('status 200', (done) => {
+            Bicicleta.allBicis(function(bicis){
+                expect(bicis.length).toBe(0);
+                var targetBici = Bicicleta.createInstance(10, "verde", "urbana", [-99.133789, 19.432278]);
+                Bicicleta.add(targetBici, function(result){
+                    // console.log(result);
+                    Bicicleta.allBicis(function(bicis){
+                        // console.log(bicis);
+                        expect(bicis.length).toBe(1);
+
+                        var headers = {'content-type' : 'application/json'};
+                        var bici = '{ "id": 10 }';
+
+                        request.post({
+                            headers: headers,
+                            url: base_url + '/delete',
+                            body: bici
+                        }, function(error, response, body) {
+                            expect(response.statusCode).toBe(204);
+                            Bicicleta.allBicis(function(bicis){
+                                // console.log(bicis);
+                                expect(bicis.length).toBe(0);
+                                done();
+                            });
+                            
+                        });
+
+                    });
+                });
+            });
+
+        });
+    });
+
 });
 
 
