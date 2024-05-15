@@ -1,6 +1,99 @@
+
+var mongoose = require('mongoose');
 var Bicicleta = require('../../models/bicicleta');
 
-beforeEach(function() {
+describe('Testing Bicicletas', function() {
+
+    beforeEach(function(done) {
+        mongoose.connection.on('connected', console.error.bind(console, 'connected'));
+        // mongoose.connection.on('connected', () => console.log('connected'));
+        mongoose.connection.on('open', () => console.log('open'));
+        mongoose.connection.on('disconnected', () => console.log('disconnected'));
+        mongoose.connection.on('reconnected', () => console.log('reconnected'));
+        mongoose.connection.on('disconnecting', () => console.log('disconnecting'));
+        mongoose.connection.on('close', () => console.log('close'));
+
+        var mongoDB = 'mongodb://localhost:27017/testdb';
+        mongoose.connect(mongoDB, { useNewUrlParser: true });
+
+        const db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'MongoDB connection error: '));
+
+        db.once('open', function(){
+            console.log('We are connected to test database!');
+            done();
+        });
+    });
+
+    afterEach(function(done){
+        Bicicleta.deleteMany({})
+            .then(function(success){
+                console.log(success);
+                mongoose.disconnect();
+                done();
+            })
+            .catch(function(err) {
+                console.log(err);
+                mongoose.disconnect();
+                done();
+            });
+    });
+
+    describe('Bicicleta.createInstance', () => {
+        it('Crea una instancia de Bicicleta', () => {
+    
+            var bici = Bicicleta.createInstance(1,"verde", "urbana", [19.432278, -99.133789]);
+    
+            expect(bici.code).toBe(1);
+            expect(bici.color).toBe("verde");
+            expect(bici.modelo).toBe("urbana");
+            expect(bici.ubicacion[0]).toBe(19.432278);
+            expect(bici.ubicacion[1]).toBe(-99.133789);
+        });
+    });
+
+    describe('Bicicleta.allBicis', function(){
+        it('comienza vacia', function(done){
+            Bicicleta.allBicis(function(bicis){
+                expect(bicis.length).toBe(0);
+                done();
+            });
+        });
+    });
+
+    describe('Bicicleta.findByCode', () => {
+        it('debe devovler la bici con code 1', (done) => {
+            Bicicleta.allBicis(function(bicis){
+                expect(bicis.length).toBe(0);
+
+                var aBici = new Bicicleta({code: 1, color: "verde", modelo: "montaña"});
+                Bicicleta.add(aBici, function(newBici){
+                    // console.log(newBici);
+               
+                    var aBici2 = new Bicicleta({code: 2, color: "rojo", modelo: "urbano"});
+                    Bicicleta.add(aBici2, function(newBici){
+                        // console.log(newBici);
+                        Bicicleta.findByCode(2, function(targetBici){
+                            expect(targetBici.code).toBe(aBici2.code);
+                            expect(targetBici.color).toBe(aBici2.color);
+                            expect(targetBici.modelo).toBe(aBici2.modelo); 
+                            done();
+                        });
+                    });
+
+                }); 
+
+            });
+        });
+    });
+
+});
+
+
+
+
+
+/* beforeEach(function() {
     Bicicleta.allBicis = [];
 });
 
@@ -83,3 +176,4 @@ describe('Bicicleta.updateById', () => {
         
     });
 });
+ */
