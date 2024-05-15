@@ -1,45 +1,40 @@
 var mongoose = require('mongoose');
 var Bicicleta = require('../../models/bicicleta');
 var request = require('request');
-//var server = require('../../bin/www');
+var server = require('../../bin/www');
 
 var base_url = "http://localhost:3000/api/bicicletas";
 
 
 describe('Bicicletas API', () => {
 
-    beforeEach(function(done){
-        mongoose.connection.on('connected', console.error.bind(console, 'connected'));
-        // mongoose.connection.on('connected', () => console.log('connected'));
-        mongoose.connection.on('open', () => console.log('open'));
-        mongoose.connection.on('disconnected', () => console.log('disconnected'));
-        mongoose.connection.on('reconnected', () => console.log('reconnected'));
-        mongoose.connection.on('disconnecting', () => console.log('disconnecting'));
-        mongoose.connection.on('close', () => console.log('close'));
-
-        var mongoDB = 'mongodb://localhost:27017/testdb';
-        mongoose.connect(mongoDB, { useNewUrlParser: true });
-
-        const db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'MongoDB connection error: '));
-
-        db.once('open', function(){
+    beforeAll(function(done){
+        mongoose.connection.once('open', function(){
             console.log('We are connected to test database!');
             done();
         });
     });
 
+    afterAll(function(done){
+        mongoose.disconnect();
+        done();
+    });
+    
+    beforeEach(function(done){
+        console.log(' << init api test');
+        done();
+    });
+
     afterEach(function(done){
         Bicicleta.deleteMany({})
             .then(function(success){
-                console.log(success);
+                console.log('>> Bicicleta.deleteMany -> %s -- %s deleted', success.acknowledged, success.deletedCount);
                 done();
             })
             .catch(function(err) {
-                console.log(err);
+                console.log('Bicicleta doc', err);
                 done();
             });
-        mongoose.disconnect();
     });
 
 
@@ -56,7 +51,9 @@ describe('Bicicletas API', () => {
 
     describe('POST BICICLETAS /create', () => {
         it('status 200', (done) => {
-            expect(Bicicleta.allBicis.length).toBe(0);
+            Bicicleta.allBicis(function(bicis){
+                expect(bicis.length).toBe(0);
+            });
             var headers = {'content-type' : 'application/json'};
             var bici = '{ "id": 10, "color": "caca", "modelo": "asteroide", "lat": 19.431278, "lng": -99.135789 }';
 
@@ -67,12 +64,11 @@ describe('Bicicletas API', () => {
             }, function(error, response, body) {
                 expect(response.statusCode).toBe(200);
                 var bici = JSON.parse(body).bicicleta;
-                console.log(bici);
 
                 expect(bici.color).toBe("caca");
                 expect(bici.modelo).toBe("asteroide");
-                expect(bici.ubicacion[0]).toBe(19.431278);
-                expect(bici.ubicacion[1]).toBe(-99.135789);
+                expect(bici.ubicacion[1]).toBe(19.431278);
+                expect(bici.ubicacion[0]).toBe(-99.135789);
                 done();
             });
         });

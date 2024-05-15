@@ -4,7 +4,7 @@ var Bicicleta = require('../../models/bicicleta');
 
 describe('Testing Bicicletas', function() {
 
-    beforeEach(function(done) {
+    beforeAll(function(done) {
         mongoose.connection.on('connected', console.error.bind(console, 'connected'));
         // mongoose.connection.on('connected', () => console.log('connected'));
         mongoose.connection.on('open', () => console.log('open'));
@@ -25,16 +25,24 @@ describe('Testing Bicicletas', function() {
         });
     });
 
+    afterAll(function(done){
+        mongoose.disconnect();
+        done();
+    });
+
+    beforeEach(function(done){
+        console.log(' << init api test');
+        done();
+    });
+
     afterEach(function(done){
         Bicicleta.deleteMany({})
             .then(function(success){
                 console.log(success);
-                mongoose.disconnect();
                 done();
             })
             .catch(function(err) {
                 console.log(err);
-                mongoose.disconnect();
                 done();
             });
     });
