@@ -5,13 +5,13 @@ var Bicicleta = require('../../models/bicicleta');
 describe('Testing Bicicletas', function() {
 
     beforeAll(function(done) {
-        mongoose.connection.on('connected', console.error.bind(console, ' MongoDB>> connected'));
-        // mongoose.connection.on('connected', () => console.log('connected'));
-        mongoose.connection.on('open', () => console.log(' MongoDB>> open'));
-        mongoose.connection.on('disconnected', () => console.log(' MongoDB>> disconnected'));
-        mongoose.connection.on('reconnected', () => console.log(' MongoDB>> reconnected'));
-        mongoose.connection.on('disconnecting', () => console.log(' MongoDB>> disconnecting'));
-        mongoose.connection.on('close', () => console.log(' MongoDB>> close'));
+        // mongoose.connection.on('connected', console.error.bind(console, ' MongoDB>> connected'));
+        // // mongoose.connection.on('connected', () => console.log('connected'));
+        // mongoose.connection.on('open', () => console.log(' MongoDB>> open'));
+        // mongoose.connection.on('disconnected', () => console.log(' MongoDB>> disconnected'));
+        // mongoose.connection.on('reconnected', () => console.log(' MongoDB>> reconnected'));
+        // mongoose.connection.on('disconnecting', () => console.log(' MongoDB>> disconnecting'));
+        // mongoose.connection.on('close', () => console.log(' MongoDB>> close'));
 
         var mongoDB = 'mongodb://localhost:27017/testdb';
         mongoose.connect(mongoDB, { useNewUrlParser: true });
@@ -27,11 +27,13 @@ describe('Testing Bicicletas', function() {
 
     afterAll(function(done){
         mongoose.disconnect();
+        console.log('We are not longer connected to test database!');
+        console.log(' << Bicicletas model test END');
         done();
     });
 
     beforeEach(function(done){
-        console.log(' << init api test');
+        console.log(' << Bicicletas model test');
         done();
     });
 

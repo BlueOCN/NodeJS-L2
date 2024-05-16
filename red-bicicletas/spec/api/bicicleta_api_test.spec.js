@@ -17,18 +17,20 @@ describe('Bicicletas API', () => {
 
     afterAll(function(done){
         mongoose.disconnect();
+        console.log('We are not longer connected to test database!');
+        console.log(' << Bicicletas API test END');
         done();
     });
     
     beforeEach(function(done){
-        console.log(' << init api test');
+        console.log(' << Bicicletas API test');
         done();
     });
 
     afterEach(function(done){
         Bicicleta.deleteMany({})
             .then(function(success){
-                console.log('>> Bicicleta.deleteMany -> %s -- %s deleted', success.acknowledged, success.deletedCount);
+                console.log('Dropped Usuario:\t', success);
                 done();
             })
             .catch(function(err) {

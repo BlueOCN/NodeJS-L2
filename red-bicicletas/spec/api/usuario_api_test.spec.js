@@ -11,7 +11,17 @@ var base_url = "http://localhost:3000/api/usuarios";
 describe('Usuarios API', () => {
 
     beforeAll(function(done){
-        mongoose.connection.once('open', function(){
+        // mongoose.connection.once('open', function(){
+        //     console.log('We are connected to test database!');
+        //     done();
+        // });
+        var mongoDB = 'mongodb://localhost:27017/testdb';
+        mongoose.connect(mongoDB, { useNewUrlParser: true });
+
+        const db = mongoose.connection;
+        db.on('error', console.error.bind(console, 'MongoDB connection error: '));
+
+        db.once('open', function(){
             console.log('We are connected to test database!');
             done();
         });
@@ -19,24 +29,26 @@ describe('Usuarios API', () => {
 
     afterAll(function(done){
         mongoose.disconnect();
+        console.log('We are not longer connected to test database!');
+        console.log(' << Usuarios API test END');
         done();
     });
     
     beforeEach(function(done){
-        console.log(' << init api test');
+        console.log(' << Usuarios API test');
         done();
     });
 
     afterEach(function(done){
         Usuario.deleteMany({})
             .then(function(success){
-                console.log('>> Usuario.deleteMany -> %s -- %s deleted', success.acknowledged, success.deletedCount);
+                console.log('Dropped Usuario:\t', success);
                 Bicicleta.deleteMany({})
                     .then(function(success){
-                        console.log('>> Bicicleta.deleteMany -> %s -- %s deleted', success.acknowledged, success.deletedCount);
+                        console.log('Dropped Bicicleta:\t', success);
                         Reserva.deleteMany({})
                             .then(function(success){
-                                console.log('>> Reserva.deleteMany -> %s -- %s deleted', success.acknowledged, success.deletedCount);
+                                console.log('Dropped Reserva:\t', success);                                
                                 done();
                             })
                             .catch(function(err) {
