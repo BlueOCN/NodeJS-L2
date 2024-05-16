@@ -19,7 +19,6 @@ usuarioSchema.methods.reservar = function(biciId, desde, hasta, cb){
 
     reserva.save()
         .then(function(result){
-            console.log('Reserva saved: ', result);
             cb()
         })
         .catch(function (err) {

@@ -6,7 +6,7 @@ var Reserva = require('../../models/reserva');
 
 
 describe('Testing Usuarios', function(){
-    beforeEach(function(done){
+    beforeAll(function(done){
         mongoose.connection.on('connected', console.error.bind(console, 'connected'));
         // mongoose.connection.on('connected', () => console.log('connected'));
         mongoose.connection.on('open', () => console.log('open'));
@@ -26,6 +26,16 @@ describe('Testing Usuarios', function(){
             done();
         });
     })
+
+    afterAll(function(done){
+        mongoose.disconnect();
+        done();
+    });
+
+    beforeEach(function(done){
+        console.log(' << init api test');
+        done();
+    });
 
     afterEach(function(done){
         
@@ -66,7 +76,7 @@ describe('Testing Usuarios', function(){
             // console.log('User: \n',usuario);
             usuario.save()
                 .then(function(result){
-                    console.log('User saved: \n', result);
+                    // console.log('User saved: \n', result);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -76,7 +86,7 @@ describe('Testing Usuarios', function(){
             // console.log('Bicicle: \n', bicicleta);
             bicicleta.save()
                 .then(function(result){
-                    console.log('Bicicle saved: \n', result);
+                    // console.log('Bicicle saved: \n', result);
                 })
                 .catch(function (err) {
                     console.log(err);
@@ -90,7 +100,7 @@ describe('Testing Usuarios', function(){
                 Reserva.find({}).populate('bicicleta').populate('usuario').exec()
                     .then(function(result){
                         // console.log('Query: ', result);
-                        console.log('Reserva[0]: ', result[0]);
+                        // console.log('Reserva[0]: ', result[0]);
                         expect(result.length).toBe(1);
                         expect(result[0].diasDeReserva()).toBe(2);
                         expect(result[0].bicicleta.code).toBe(1);
